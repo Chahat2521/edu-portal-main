@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { Icons } from "@/components/ui/Icons";
 
 interface Group {
   _id: string;
@@ -58,7 +59,7 @@ function GroupCard({
       {/* Header */}
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, paddingRight: isMember ? 70 : 0 }}>
-          <span style={{ fontSize: 20 }}>👥</span>
+          <Icons.Users width={24} height={24} />
           <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", margin: 0 }}>{group.name}</h3>
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -85,8 +86,8 @@ function GroupCard({
 
       {/* Meeting schedule */}
       {group.meetingSchedule && (
-        <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", gap: 6 }}>
-          <span>📅</span> {group.meetingSchedule}
+        <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", gap: 6, alignItems: "center" }}>
+          <Icons.Calendar width={14} height={14} /> {group.meetingSchedule}
         </div>
       )}
 
@@ -195,7 +196,7 @@ function CreateGroupModal({ onClose, onCreated }: { onClose: () => void; onCreat
           <button onClick={onClose} style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, width: 32, height: 32, fontSize: 16, cursor: "pointer", color: "var(--muted)" }}>✕</button>
         </div>
         <div style={{ padding: "24px 26px", display: "flex", flexDirection: "column", gap: 14 }}>
-          {error && <div style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "var(--error-text)" }}>🚫 {error}</div>}
+          {error && <div style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "var(--error-text)", display: "flex", alignItems: "center", gap: 6 }}><Icons.AlertCircle width={16} height={16} /> {error}</div>}
 
           <div><label style={labelStyle}>Group Name *</label><input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="e.g. CS301 Binary Trees Study" style={inputStyle} /></div>
           <div><label style={labelStyle}>Description</label><textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="What will your group focus on?" rows={3} style={{ ...inputStyle, resize: "vertical" }} /></div>
@@ -227,7 +228,7 @@ function CreateGroupModal({ onClose, onCreated }: { onClose: () => void; onCreat
             disabled={loading}
             style={{ padding: "12px 0", borderRadius: 12, border: "none", background: "#1e3a5f", color: "#fff", fontWeight: 800, fontSize: 15, fontFamily: "inherit", cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
           >
-            {loading ? "Creating..." : "✨ Create Group"}
+            {loading ? "Creating..." : <><Icons.Sparkles width={16} height={16} /> Create Group</>}
           </button>
         </div>
       </div>
@@ -273,8 +274,8 @@ export default function StudentGroupsPage() {
     const user = JSON.parse(stored);
     const res  = await fetch(`/api/student/groups/${id}/join`, { method: "POST", headers: { Authorization: `Bearer ${user.token}` } });
     const data = await res.json();
-    if (res.ok) { showMsg("✅ Joined group!"); fetchGroups(); }
-    else showMsg("🚫 " + (data.error || "Failed to join"));
+    if (res.ok) { showMsg("Joined group!"); fetchGroups(); }
+    else showMsg(data.error || "Failed to join");
   };
 
   const handleLeave = async (id: string) => {
@@ -284,7 +285,7 @@ export default function StudentGroupsPage() {
     const res  = await fetch(`/api/student/groups/${id}/join`, { method: "DELETE", headers: { Authorization: `Bearer ${user.token}` } });
     const data = await res.json();
     if (res.ok) { showMsg("Left group"); fetchGroups(); }
-    else showMsg("🚫 " + (data.error || "Failed to leave"));
+    else showMsg(data.error || "Failed to leave");
   };
 
   const filtered = groups.filter((g) => {
@@ -306,7 +307,7 @@ export default function StudentGroupsPage() {
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 900, color: "var(--text)", margin: "0 0 4px" }}>Study Groups 👥</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 900, color: "var(--text)", margin: "0 0 4px", display: "flex", alignItems: "center", gap: 10 }}>Study Groups <Icons.Users width={28} height={28} /></h1>
           <p style={{ color: "var(--muted)", fontSize: 15, margin: 0 }}>Connect with peers, collaborate, and ace your courses together.</p>
         </div>
         <button
@@ -320,7 +321,7 @@ export default function StudentGroupsPage() {
       {/* Filters */}
       <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
         <input
-          placeholder="🔍 Search groups..."
+          placeholder="Search groups..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{ padding: "9px 16px", borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--text)", fontSize: 14, outline: "none", fontFamily: "inherit", flex: 1, maxWidth: 320 }}
@@ -347,12 +348,12 @@ export default function StudentGroupsPage() {
       {/* Stats bar */}
       <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
         {[
-          { label: "Total Groups", value: groups.length, icon: "👥" },
-          { label: "You're In",    value: groups.filter((g) => g.members.includes(userId)).length, icon: "✅" },
-          { label: "Open to Join", value: groups.filter((g) => g.isOpen && g.members.length < g.maxMembers && !g.members.includes(userId)).length, icon: "🚪" },
+          { label: "Total Groups", value: groups.length, icon: <Icons.Users width={24} height={24} /> },
+          { label: "You're In",    value: groups.filter((g) => g.members.includes(userId)).length, icon: <Icons.Check width={24} height={24} /> },
+          { label: "Open to Join", value: groups.filter((g) => g.isOpen && g.members.length < g.maxMembers && !g.members.includes(userId)).length, icon: <Icons.Plus width={24} height={24} /> },
         ].map((s) => (
           <div key={s.label} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px 20px", display: "flex", alignItems: "center", gap: 12, boxShadow: "var(--shadow-sm)" }}>
-            <span style={{ fontSize: 22 }}>{s.icon}</span>
+            <div style={{ color: "var(--text)" }}>{s.icon}</div>
             <div>
               <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>{s.label}</div>
               <div style={{ fontSize: 22, fontWeight: 900, color: "var(--text)" }}>{s.value}</div>
@@ -369,7 +370,7 @@ export default function StudentGroupsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px 0", background: "var(--card)", borderRadius: 20, border: "1px solid var(--border)" }}>
-          <div style={{ fontSize: 56, marginBottom: 16 }}>👥</div>
+          <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Users width={56} height={56} color="var(--muted)" /></div>
           <h3 style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", margin: "0 0 8px" }}>No groups found</h3>
           <p style={{ color: "var(--muted)", fontSize: 14, marginBottom: 24 }}>
             {filter === "mine" ? "You haven't joined any groups yet." : "No groups match your search."}

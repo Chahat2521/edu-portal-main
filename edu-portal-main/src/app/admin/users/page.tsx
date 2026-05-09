@@ -5,6 +5,7 @@ import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
 import SearchBar from "@/components/shared/SearchBar";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import FilterDropdown from "@/components/shared/FilterDropdown";
+import { Icons } from "@/components/ui/Icons";
 
 export default function AdminUsersPage() {
   const { showToast } = useToast();
@@ -84,7 +85,7 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>👥 All Users</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><Icons.Users width={24} height={24} /> All Users</h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 24px" }}>Manage system users</p>
 
       <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
@@ -184,7 +185,7 @@ export default function AdminUsersPage() {
                         cursor: "pointer",
                       }}
                     >
-                      ❌ Delete
+                      <Icons.Trash width={14} height={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 4 }} /> Delete
                     </button>
                   </td>
                 </tr>

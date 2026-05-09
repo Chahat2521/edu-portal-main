@@ -9,6 +9,7 @@ import MaterialCard from "@/components/teacher/MaterialCard";
 import UpcomingSession from "@/components/teacher/UpcomingSession";
 import ApprovalRequests from "@/components/teacher/ApprovalRequests";
 import { Task } from "@/types";
+import { Icons } from "@/components/ui/Icons";
 
 export default function TeacherDashboard() {
   const tasks: Task[] = [
@@ -18,17 +19,17 @@ export default function TeacherDashboard() {
   ];
 
   const classes = [
-    { icon: "📐", name: "Sem 4 – Data Structures", color: "#fff3e0" },
-    { icon: "🗄️", name: "Sem 4 – DBMS", color: "#e8f5e9" },
-    { icon: "🌐", name: "Sem 6 – Networks", color: "#e3f2fd" },
-    { icon: "📊", name: "Sem 6 – Statistics", color: "#fce4ec" },
+    { icon: <Icons.BookOpen width={20} height={20} />, name: "Sem 4 – Data Structures", color: "#fff3e0" },
+    { icon: <Icons.Database width={20} height={20} />, name: "Sem 4 – DBMS", color: "#e8f5e9" },
+    { icon: <Icons.Globe width={20} height={20} />, name: "Sem 6 – Networks", color: "#e3f2fd" },
+    { icon: <Icons.Chart width={20} height={20} />, name: "Sem 6 – Statistics", color: "#fce4ec" },
   ];
 
   const materials = [
-    { icon: "📄", name: "Lecture Notes Unit 4", bg: "#ffeaea" },
-    { icon: "📊", name: "Student Grade Sheet", bg: "#eaffea" },
-    { icon: "📝", name: "Mid Semester Paper", bg: "#eaf0ff" },
-    { icon: "📋", name: "Course Outline 2025", bg: "#fff5ea" },
+    { icon: <Icons.FileText width={20} height={20} />, name: "Lecture Notes Unit 4", bg: "#ffeaea" },
+    { icon: <Icons.Chart width={20} height={20} />, name: "Student Grade Sheet", bg: "#eaffea" },
+    { icon: <Icons.FileText width={20} height={20} />, name: "Mid Semester Paper", bg: "#eaf0ff" },
+    { icon: <Icons.File width={20} height={20} />, name: "Course Outline 2025", bg: "#fff5ea" },
   ];
 
   const approvalRequests = [
@@ -39,7 +40,7 @@ export default function TeacherDashboard() {
   return (
     <div>
       <HeroBanner
-        title="Welcome to Faculty Portal! 👨‍🏫"
+        title="Welcome to Faculty Portal!"
         gradient="linear-gradient(135deg, #a8d8f0, #7ec8e3)"
         textColor="#0a2940"
         searchPlaceholder="Search students, lectures, research papers..."
@@ -52,7 +53,7 @@ export default function TeacherDashboard() {
           <Card>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a", margin: 0 }}>Faculty Tasks</h2>
-              <span style={{ fontSize: 20 }}>✓</span>
+              <Icons.Check width={20} height={20} />
             </div>
             <TaskCard tasks={tasks} />
             <Button variant="ghost" color="#4fa3e0" style={{ marginTop: 12 }}>

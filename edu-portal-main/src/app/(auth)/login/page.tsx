@@ -2,7 +2,6 @@
 import { useState, useCallback, type CSSProperties, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Icons } from "@/components/ui/Icons";
 
 /* ── Validation helpers ────────────────────────────────────── */
@@ -34,13 +33,11 @@ function Field({ label, error, touched, valid, children }: FieldProps) {
     <div style={{ marginBottom: 16 }}>
       <label style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: 6, letterSpacing: "0.04em", textTransform: "uppercase" }}>
         {label}
-        {showOk && <span style={{ color: "var(--input-success)", marginLeft: 6, fontSize: 13 }}>✓</span>}
       </label>
       {children}
       {showError && (
-        <p style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}
-           className="animate-slide-down">
-          <span>⚠</span> {error}
+        <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}>
+          <Icons.AlertTriangle width={12} height={12} /> {error}
         </p>
       )}
     </div>
@@ -70,20 +67,14 @@ export default function LoginPage() {
     paddingRight: 48,
     borderRadius: 10,
     fontSize: 14,
-    border: `1.5px solid ${
-      isTouched && err
-        ? "var(--input-error)"
-        : isTouched && !err
-        ? "var(--input-success)"
-        : "var(--input-border)"
-    }`,
+    border: `1.5px solid ${isTouched && err ? "var(--input-error)" : "var(--input-border)"}`,
     outline: "none",
     fontFamily: "inherit",
     color: "var(--text)",
     background: "var(--input-bg)",
     boxSizing: "border-box" as const,
     transition: "border-color 0.2s ease, box-shadow 0.2s ease",
-    boxShadow: isTouched && err ? "0 0 0 3px rgba(239,68,68,0.12)" : isTouched && !err ? "0 0 0 3px rgba(34,197,94,0.12)" : "none",
+    boxShadow: isTouched && err ? "0 0 0 3px rgba(239,68,68,0.12)" : "none",
   }), []);
 
   const triggerShake = () => {
@@ -148,12 +139,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif", background: "var(--bg)" }}>
-      {/* Global Theme toggle fixed top-right */}
-      <div style={{ position: "fixed", top: 20, right: 20, zIndex: 100 }}>
-        <ThemeToggle />
-      </div>
-
+    <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif", background: "#ffffff" }}>
       {/* ── Left Panel ─────────────────────────── */}
       <div
         style={{
@@ -272,7 +258,7 @@ export default function LoginPage() {
           className={shake ? "animate-shake" : ""}
         >
           <h2 style={{ fontSize: 28, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-            Welcome back! 👋
+            Welcome back!
           </h2>
           <p style={{ color: "var(--muted)", fontSize: 14, marginBottom: 28 }}>
             Sign in to your campus portal
@@ -314,18 +300,8 @@ export default function LoginPage() {
           </div>
 
           {/* Admin hint */}
-          <div
-            style={{
-              background: "var(--success-bg)",
-              border: "1px solid var(--success-border)",
-              borderRadius: 8,
-              padding: "8px 12px",
-              marginBottom: 20,
-              fontSize: 12,
-              color: "var(--success-text)",
-            }}
-          >
-            💡 Admin? Use <strong>admin@campusportal.com</strong> with your admin password
+          <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", marginBottom: 24, fontSize: 13, color: "var(--muted)", display: "flex", alignItems: "center", gap: 8 }}>
+            <Icons.Lightbulb width={16} height={16} /> Admin? Use <strong>admin@campusportal.com</strong> with your admin password
           </div>
 
           {/* Email */}
@@ -378,7 +354,7 @@ export default function LoginPage() {
                   borderRadius: 6,
                 }}
               >
-                {showPassword ? "🙈 Hide" : "👁 Show"}
+                {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </Field>
@@ -391,22 +367,8 @@ export default function LoginPage() {
 
           {/* API Error */}
           {apiError && (
-            <div
-              className="animate-slide-down"
-              style={{
-                background: "var(--error-bg)",
-                border: "1px solid var(--error-border)",
-                borderRadius: 10,
-                padding: "10px 14px",
-                marginBottom: 16,
-                fontSize: 13,
-                color: "var(--error-text)",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              <span>🚫</span> {apiError}
+            <div className="animate-slide-down" style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "var(--error-text)", display: "flex", alignItems: "center", gap: 8 }}>
+              <Icons.AlertCircle width={16} height={16} /> {apiError}
             </div>
           )}
 
@@ -439,7 +401,7 @@ export default function LoginPage() {
           >
             {loading ? (
               <>
-                <span className="animate-spin" style={{ display: "inline-block", fontSize: 16 }}>⟳</span>
+                <Icons.Loader width={16} height={16} className="animate-spin" />
                 Signing In...
               </>
             ) : (

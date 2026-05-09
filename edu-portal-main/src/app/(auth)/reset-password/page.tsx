@@ -2,7 +2,6 @@
 import { useState, useEffect, Suspense, type KeyboardEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 
 function getStrength(pw: string) {
   if (!pw) return { score: 0, label: "", color: "transparent" };
@@ -74,15 +73,11 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", fontFamily: "'DM Sans', sans-serif", padding: 16 }}>
-      <div style={{ position: "fixed", top: 20, right: 20, zIndex: 100 }}>
-        <ThemeToggle />
-      </div>
-
-      <div className="animate-fade-in" style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24, padding: "48px 44px", maxWidth: 440, width: "100%", boxShadow: "var(--shadow-lg)", textAlign: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", fontFamily: "'DM Sans', sans-serif", padding: 16 }}>
+      <div className={`animate-fade-in ${shake ? "animate-shake" : ""}`} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24, padding: "48px 44px", maxWidth: 440, width: "100%", boxShadow: "var(--shadow-lg)", textAlign: "center" }}>
         {success ? (
           <>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Check width={64} height={64} style={{ color: "#7dc443" }} /></div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 12px" }}>Password Reset!</h1>
             <p style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
               Your password has been reset successfully. Redirecting you to login...
@@ -93,13 +88,13 @@ function ResetPasswordForm() {
           </>
         ) : (
           <>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #c8f08f, #7dc443)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, margin: "0 auto 20px", boxShadow: "0 4px 16px rgba(125,196,67,0.3)" }}>🔐</div>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #c8f08f, #7dc443)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 4px 16px rgba(125,196,67,0.3)", color: "#fff" }}><Icons.Lock width={32} height={32} /></div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>Reset Password</h1>
             <p style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.6, marginBottom: 28 }}>Create a strong new password for your account.</p>
 
             {error && (
-              <div className="animate-slide-down" style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "10px 14px", marginBottom: 16, fontSize: 13, color: "var(--error-text)", textAlign: "left" }}>
-                🚫 {error}
+              <div className="animate-slide-down" style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "var(--error-text)", display: "flex", alignItems: "center", gap: 8, textAlign: "left" }}>
+                <Icons.AlertCircle width={16} height={16} /> {error}
               </div>
             )}
 
@@ -107,7 +102,6 @@ function ResetPasswordForm() {
             <div style={{ textAlign: "left", marginBottom: 14 }}>
               <label style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: 6, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 New Password
-                {touched.pw && !passErr && <span style={{ color: "var(--input-success)", marginLeft: 6 }}>✓</span>}
               </label>
               <div style={{ position: "relative" }}>
                 <input
@@ -118,18 +112,18 @@ function ResetPasswordForm() {
                   placeholder="Create a strong password"
                   style={{
                     width: "100%", padding: "12px 70px 12px 14px", borderRadius: 10, fontSize: 14,
-                    border: `1.5px solid ${touched.pw && passErr ? "var(--input-error)" : touched.pw && !passErr ? "var(--input-success)" : "var(--input-border)"}`,
+                    border: `1.5px solid ${touched.pw && passErr ? "var(--input-error)" : "var(--input-border)"}`,
                     outline: "none", fontFamily: "inherit", color: "var(--text)", background: "var(--input-bg)", boxSizing: "border-box" as const,
-                    boxShadow: touched.pw && passErr ? "0 0 0 3px rgba(239,68,68,0.12)" : touched.pw && !passErr ? "0 0 0 3px rgba(34,197,94,0.12)" : "none",
+                    boxShadow: touched.pw && passErr ? "0 0 0 3px rgba(239,68,68,0.12)" : "none",
                     transition: "border-color 0.2s, box-shadow 0.2s",
                   }}
                 />
                 <button type="button" onClick={() => setShowPw((p) => !p)} style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--muted)", fontSize: 12, fontFamily: "inherit", fontWeight: 600, padding: "4px 6px", borderRadius: 6 }}>
-                  {showPw ? "🙈 Hide" : "👁 Show"}
+                  {showPw ? "Hide" : "Show"}
                 </button>
               </div>
               {touched.pw && passErr && (
-                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5 }}>⚠ {passErr}</p>
+                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}><Icons.AlertTriangle width={12} height={12} /> {passErr}</p>
               )}
               {password.length > 0 && (
                 <div style={{ marginTop: 8 }}>
@@ -147,7 +141,6 @@ function ResetPasswordForm() {
             <div style={{ textAlign: "left", marginBottom: 24 }}>
               <label style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: 6, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 Confirm Password
-                {touched.confirm && !confirmErr && confirm && <span style={{ color: "var(--input-success)", marginLeft: 6 }}>✓</span>}
               </label>
               <input
                 type="password"
@@ -157,13 +150,13 @@ function ResetPasswordForm() {
                 placeholder="Repeat your password"
                 style={{
                   width: "100%", padding: "12px 14px", borderRadius: 10, fontSize: 14,
-                  border: `1.5px solid ${touched.confirm && confirmErr ? "var(--input-error)" : touched.confirm && !confirmErr && confirm ? "var(--input-success)" : "var(--input-border)"}`,
+                  border: `1.5px solid ${touched.confirm && confirmErr ? "var(--input-error)" : "var(--input-border)"}`,
                   outline: "none", fontFamily: "inherit", color: "var(--text)", background: "var(--input-bg)", boxSizing: "border-box" as const,
                   transition: "border-color 0.2s",
                 }}
               />
               {touched.confirm && confirmErr && (
-                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5 }}>⚠ {confirmErr}</p>
+                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}><Icons.AlertTriangle width={12} height={12} /> {confirmErr}</p>
               )}
             </div>
 
@@ -182,7 +175,7 @@ function ResetPasswordForm() {
                 marginBottom: 20, transition: "all 0.2s ease",
               }}
             >
-              {loading ? <><span className="animate-spin" style={{ display: "inline-block" }}>⟳</span> Resetting...</> : "Reset Password →"}
+              {loading ? <><Icons.Loader width={16} height={16} className="animate-spin" /> Resetting...</> : "Reset Password →"}
             </button>
 
             <Link href="/login" style={{ fontSize: 13, color: "var(--muted)", fontWeight: 500 }}>
@@ -197,7 +190,7 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}><p style={{ color: "var(--muted)" }}>Loading...</p></div>}>
+    <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff" }}><p style={{ color: "var(--muted)" }}>Loading...</p></div>}>
       <ResetPasswordForm />
     </Suspense>
   );

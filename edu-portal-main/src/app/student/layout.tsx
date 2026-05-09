@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
+import ProfileDropdown from "@/components/shared/ProfileDropdown";
 
 import { Icons } from "@/components/ui/Icons";
 
@@ -50,8 +50,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         transition: "width 0.3s ease, padding 0.3s ease",
       }}>
         {/* Logo */}
-        {/* Header w/ Logo & Toggle */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "space-between" : "center", marginBottom: 32 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "flex-start" : "center", marginBottom: 32, position: "relative" }}>
           {isOpen && (
             <Link href="/student" style={{ textDecoration: "none", flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -66,8 +65,27 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           {!isOpen && (
             <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", marginBottom: 16 }}><Icons.GraduationCap width={20} height={20} /></div>
           )}
-          <button onClick={() => setIsOpen(!isOpen)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.6)", padding: 4, display: "flex" }}>
-            {isOpen ? <Icons.ChevronLeft width={20} height={20} /> : <Icons.ChevronRight width={20} height={20} />}
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            style={{ 
+              position: "absolute",
+              right: isOpen ? -28 : -24, 
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "var(--card)", 
+              border: "1px solid var(--border)", 
+              borderRadius: "50%", 
+              width: 24,
+              height: 24,
+              cursor: "pointer", 
+              color: "var(--text)", 
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 201,
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
+            }}>
+            {isOpen ? <Icons.ChevronLeft width={14} height={14} /> : <Icons.ChevronRight width={14} height={14} />}
           </button>
         </div>
 
@@ -105,16 +123,6 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
         {/* Bottom */}
         <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <ThemeToggle />
-          </div>
-          {isOpen && (
-            <div style={{ background: "rgba(255,255,255,0.07)", borderRadius: 10, padding: "10px 12px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", marginBottom: 2 }}>Signed in as</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user?.name || "Student"}</div>
-              <div style={{ fontSize: 10, color: "#7dc443", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Student</div>
-            </div>
-          )}
           <button
             onClick={handleLogout}
             title={!isOpen ? "Logout" : undefined}
@@ -156,13 +164,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               <Icons.Bell width={22} height={22} />
               <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: "#f43f5e", borderRadius: "50%", border: "2px solid var(--nav-bg)", display: "block" }} />
             </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{user?.name || "Student"}</div>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Computer Science, Year 3</div>
-            </div>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg, #4fa3e0, #7dc443)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "#fff", fontWeight: 800, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
-              {(user?.name || "S")[0].toUpperCase()}
-            </div>
+            <ProfileDropdown user={user} roleLabel="Computer Science, Year 3" />
           </div>
         </header>
 

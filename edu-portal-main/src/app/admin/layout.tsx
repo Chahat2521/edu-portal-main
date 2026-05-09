@@ -2,7 +2,7 @@
 import { useRouter, usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
+import ProfileDropdown from "@/components/shared/ProfileDropdown";
 import { Icons } from "@/components/ui/Icons";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         }}
       >
         {/* Header w/ Toggle */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "space-between" : "center", marginBottom: 36 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "flex-start" : "center", marginBottom: 36, position: "relative" }}>
           {isOpen && (
             <div style={{ flex: 1 }}>
               <div style={{ border: "2px solid rgba(125,196,67,0.6)", borderRadius: 10, padding: "8px 14px", fontWeight: 900, fontSize: 13, letterSpacing: 1.5, color: "#7dc443", textAlign: "center", background: "rgba(125,196,67,0.08)" }}>
@@ -80,8 +80,27 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           {!isOpen && (
             <div style={{ background: "rgba(125,196,67,0.15)", color: "#7dc443", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}><Icons.GraduationCap width={20} height={20} /></div>
           )}
-          <button onClick={() => setIsOpen(!isOpen)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.6)", padding: 4, display: "flex" }}>
-            {isOpen ? <Icons.ChevronLeft width={20} height={20} /> : <Icons.ChevronRight width={20} height={20} />}
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            style={{ 
+              position: "absolute",
+              right: isOpen ? -28 : -24, 
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "var(--card)", 
+              border: "1px solid var(--border)", 
+              borderRadius: "50%", 
+              width: 24,
+              height: 24,
+              cursor: "pointer", 
+              color: "var(--text)", 
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 201,
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
+            }}>
+            {isOpen ? <Icons.ChevronLeft width={14} height={14} /> : <Icons.ChevronRight width={14} height={14} />}
           </button>
         </div>
 
@@ -119,26 +138,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
         {/* Bottom section */}
         <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Theme toggle */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <ThemeToggle />
-          </div>
-
-          {/* User info */}
-          {isOpen && (
-            <div
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                borderRadius: 10,
-                padding: "10px 14px",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>Signed in as</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{user?.name || "Admin"}</div>
-              <div style={{ fontSize: 11, color: "#7dc443", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginTop: 2 }}>Administrator</div>
-            </div>
-          )}
 
           {/* Logout */}
           <button
@@ -169,18 +168,52 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* ── Main Content ─────────────────────────────────── */}
-      <main
-        style={{
-          marginLeft: isOpen ? 240 : 80,
-          flex: 1,
-          background: "var(--bg)",
-          minHeight: "100vh",
-          padding: "32px",
-          transition: "margin-left 0.3s ease, background 0.2s ease",
-        }}
-      >
-        {children}
-      </main>
+      <div style={{ marginLeft: isOpen ? 240 : 80, flex: 1, display: "flex", flexDirection: "column", transition: "margin-left 0.3s ease" }}>
+        <header style={{
+          height: 60,
+          background: "var(--nav-bg)",
+          borderBottom: "1px solid var(--border)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 32px",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          boxShadow: "var(--shadow-sm)",
+        }}>
+          {/* Search bar */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, background: "var(--bg-secondary)", borderRadius: 10, padding: "9px 16px", border: "1px solid var(--border)", maxWidth: 420, flex: 1 }}>
+            <span style={{ color: "var(--muted)", display: "flex" }}><Icons.Search width={18} height={18} /></span>
+            <input
+              placeholder="Search users, courses, or reports..."
+              style={{ border: "none", background: "transparent", outline: "none", fontSize: 14, color: "var(--text)", width: "100%", fontFamily: "inherit" }}
+            />
+          </div>
+
+          {/* Right side */}
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginLeft: 20 }}>
+            <div style={{ position: "relative", cursor: "pointer", display: "flex", color: "var(--text)" }}>
+              <Icons.Bell width={22} height={22} />
+              <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: "#f43f5e", borderRadius: "50%", border: "2px solid var(--nav-bg)", display: "block" }} />
+            </div>
+            <ProfileDropdown user={user} roleLabel="Administrator" />
+          </div>
+        </header>
+
+        <main
+          style={{
+            flex: 1,
+            background: "var(--bg)",
+            minHeight: "100vh",
+            padding: "32px",
+            transition: "background 0.2s ease",
+            overflow: "auto"
+          }}
+        >
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

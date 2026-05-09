@@ -2,7 +2,6 @@
 import { useState, useCallback, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Icons } from "@/components/ui/Icons";
 
 /* ── Validation helpers ───────────────────────────────────── */
@@ -73,7 +72,7 @@ function Field({
       {children}
       {showError && (
         <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}>
-          <span>⚠</span> {error}
+          <Icons.AlertTriangle width={12} height={12} /> {error}
         </p>
       )}
       {!showError && hint && !touched && (
@@ -204,13 +203,13 @@ export default function SignupPage() {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", fontFamily: "'DM Sans', sans-serif" }}>
         <div className="animate-fade-in" style={{ background: "var(--card)", borderRadius: 24, padding: 48, maxWidth: 480, width: "100%", textAlign: "center", boxShadow: "var(--shadow-lg)", border: "1px solid var(--border)" }}>
-          <div style={{ fontSize: 64, marginBottom: 16 }}>⏳</div>
+          <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Hourglass width={64} height={64} style={{ color: "var(--muted)" }} /></div>
           <h2 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 12px" }}>Application Submitted!</h2>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.7, margin: "0 0 24px" }}>
             Your faculty account request has been submitted for admin approval. You will be able to log in once the admin approves your account.
           </p>
-          <div style={{ background: "var(--warning-bg)", border: "1px solid var(--warning-border)", borderRadius: 10, padding: "12px 16px", marginBottom: 28, fontSize: 13, color: "var(--warning-text)" }}>
-            📧 Please check your email for updates on your application status.
+          <div style={{ background: "var(--warning-bg)", border: "1px solid var(--warning-border)", borderRadius: 10, padding: "12px 16px", marginBottom: 28, fontSize: 13, color: "var(--warning-text)", display: "flex", alignItems: "center", gap: 6, justifyContent: "center" }}>
+            <Icons.Mail width={16} height={16} /> Please check your email for updates on your application status.
           </div>
           <Link href="/login" style={{ display: "inline-block", background: "#4fa3e0", color: "#fff", padding: "12px 32px", borderRadius: 12, fontWeight: 700, fontSize: 15 }}>
             Back to Login
@@ -224,7 +223,7 @@ export default function SignupPage() {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", fontFamily: "'DM Sans', sans-serif" }}>
         <div className="animate-fade-in" style={{ background: "var(--card)", borderRadius: 24, padding: 48, maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "var(--shadow-lg)", border: "1px solid var(--border)" }}>
-          <div style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
+          <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Sparkles width={64} height={64} style={{ color: "#7dc443" }} /></div>
           <h2 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>Account Created!</h2>
           <p style={{ color: "var(--muted)", fontSize: 14 }}>Redirecting you to your dashboard...</p>
           <div style={{ marginTop: 24, height: 4, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
@@ -312,8 +311,8 @@ export default function SignupPage() {
         }}
       >
         <div className={shake ? "animate-shake" : ""}>
-          <h2 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
-            Create Account ✨
+          <h2 style={{ fontSize: 26, fontWeight: 900, color: "var(--text)", margin: "0 0 6px", display: "flex", alignItems: "center", gap: 8 }}>
+            Create Account <Icons.Sparkles width={24} height={24} />
           </h2>
           <p style={{ color: "var(--muted)", fontSize: 14, marginBottom: 24 }}>
             Join Campus Portal today
@@ -412,7 +411,7 @@ export default function SignupPage() {
                   fontSize: 12, fontFamily: "inherit", fontWeight: 600, padding: "4px 6px", borderRadius: 6,
                 }}
               >
-                {showPassword ? "🙈 Hide" : "👁 Show"}
+                {showPassword ? "Hide" : "Show"}
               </button>
             </div>
 
@@ -450,7 +449,7 @@ export default function SignupPage() {
           {/* API Error */}
           {apiError && (
             <div className="animate-slide-down" style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "10px 14px", marginBottom: 14, fontSize: 13, color: "var(--error-text)", display: "flex", alignItems: "center", gap: 8 }}>
-              <span>🚫</span> {apiError}
+              <Icons.AlertCircle width={16} height={16} /> {apiError}
             </div>
           )}
 
@@ -472,7 +471,7 @@ export default function SignupPage() {
             }}
           >
             {loading ? (
-              <><span className="animate-spin" style={{ display: "inline-block", fontSize: 16 }}>⟳</span> Creating Account...</>
+              <><Icons.Loader width={16} height={16} className="animate-spin" /> Creating Account...</>
             ) : "Create Account →"}
           </button>
 

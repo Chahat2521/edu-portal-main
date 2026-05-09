@@ -3,6 +3,8 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IAssignment extends Document {
   title: string;
   description: string;
+  fileUrl?: string;
+  submissionUrl?: string;
   subject: string;
   subjectCode: string;
   tags: string[];
@@ -20,6 +22,8 @@ export interface IAssignment extends Document {
 const AssignmentSchema = new Schema<IAssignment>({
   title: { type: String, required: true },
   description: { type: String },
+  fileUrl: { type: String },
+  submissionUrl: { type: String },
   subject: { type: String, required: true },
   subjectCode: { type: String, required: true },
   tags: [{ type: String }],

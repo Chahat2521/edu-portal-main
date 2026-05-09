@@ -1,5 +1,5 @@
 interface MaterialCardProps {
-  icon: string;
+  icon: React.ReactNode;
   name: string;
   bgColor: string;
 }

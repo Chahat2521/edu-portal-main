@@ -4,6 +4,7 @@ import { useToast } from "@/components/shared/Toast";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
 import SearchBar from "@/components/shared/SearchBar";
 import FilterDropdown from "@/components/shared/FilterDropdown";
+import { Icons } from "@/components/ui/Icons";
 
 export default function StudentResourcesPage() {
   const { showToast } = useToast();
@@ -44,14 +45,14 @@ export default function StudentResourcesPage() {
   );
 
   const getResourceIcon = (type: string) => {
-    const icons: Record<string, string> = {
-      pdf: "📄",
-      video: "🎥",
-      link: "🔗",
-      document: "📝",
-      notes: "📋",
+    const icons: Record<string, React.ReactNode> = {
+      pdf: <Icons.FileText width={32} height={32} />,
+      video: <Icons.Video width={32} height={32} />,
+      link: <Icons.LinkIcon width={32} height={32} />,
+      document: <Icons.FileText width={32} height={32} />,
+      notes: <Icons.FileText width={32} height={32} />,
     };
-    return icons[type] || "📁";
+    return icons[type] || <Icons.File width={32} height={32} />;
   };
 
   const handleDownload = async (resourceId: string) => {
@@ -73,7 +74,7 @@ export default function StudentResourcesPage() {
 
   return (
     <div style={{ padding: "32px" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>📚 Learning Library</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><Icons.BookOpen width={24} height={24} /> Learning Library</h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 24px" }}>Access course materials and resources</p>
 
       <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
@@ -151,7 +152,7 @@ export default function StudentResourcesPage() {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ fontSize: 12, color: "#999" }}>
-                  📥 {resource.downloads} downloads
+                  <Icons.Download width={14} height={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 4 }} /> {resource.downloads} downloads
                 </span>
                 <a
                   href={resource.url}

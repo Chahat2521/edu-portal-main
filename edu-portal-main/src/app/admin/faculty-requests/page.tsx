@@ -6,6 +6,7 @@ import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
 import SearchBar from "@/components/shared/SearchBar";
 import { FacultyRequest } from "@/types";
+import { Icons } from "@/components/ui/Icons";
 
 export default function FacultyRequestsPage() {
   const { showToast } = useToast();
@@ -114,7 +115,7 @@ export default function FacultyRequestsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>Faculty Requests 👨‍🏫</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}>Faculty Requests <Icons.Teacher width={24} height={24} /></h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 24px" }}>
         Approve or reject pending faculty signups
       </p>
@@ -226,7 +227,7 @@ export default function FacultyRequestsPage() {
                             cursor: "pointer",
                           }}
                         >
-                          ✅ Approve
+                          <Icons.Check width={14} height={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 4 }} /> Approve
                         </button>
                         <button
                           onClick={() => {
@@ -245,7 +246,7 @@ export default function FacultyRequestsPage() {
                             cursor: "pointer",
                           }}
                         >
-                          ❌ Reject
+                          <Icons.X width={14} height={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 4 }} /> Reject
                         </button>
                       </div>
                     )}

@@ -1,7 +1,6 @@
 "use client";
 import { useState, type KeyboardEvent } from "react";
 import Link from "next/link";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
 
@@ -50,16 +49,11 @@ export default function ForgotPasswordPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "var(--bg)",
+        background: "#ffffff",
         fontFamily: "'DM Sans', sans-serif",
         padding: 16,
       }}
     >
-      {/* Theme toggle fixed top-right */}
-      <div style={{ position: "fixed", top: 20, right: 20, zIndex: 100 }}>
-        <ThemeToggle />
-      </div>
-
       <div
         className="animate-fade-in"
         style={{
@@ -75,7 +69,7 @@ export default function ForgotPasswordPage() {
       >
         {sent ? (
           <>
-            <div style={{ fontSize: 64, marginBottom: 16 }}>📬</div>
+            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Mail width={64} height={64} style={{ color: "#7dc443" }} /></div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 12px" }}>
               Check your email!
             </h1>
@@ -94,7 +88,7 @@ export default function ForgotPasswordPage() {
                 textAlign: "left",
               }}
             >
-              💡 The link expires in <strong>1 hour</strong>. Check your spam folder if you don&apos;t see it.
+              <Icons.Lightbulb width={16} height={16} /> The link expires in <strong>1 hour</strong>. Check your spam folder if you don&apos;t see it.
             </div>
 
             {/* Dev mode: show reset link directly */}
@@ -111,7 +105,7 @@ export default function ForgotPasswordPage() {
                   textAlign: "left",
                 }}
               >
-                <div style={{ fontWeight: 800, marginBottom: 8, fontSize: 13 }}>🛠️ Dev Mode — Reset Link:</div>
+                <div style={{ fontWeight: 800, marginBottom: 8, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}><Icons.Settings width={14} height={14} /> Dev Mode — Reset Link:</div>
                 <a
                   href={devLink}
                   style={{ color: "var(--info-text)", wordBreak: "break-all", fontWeight: 600 }}
@@ -143,22 +137,7 @@ export default function ForgotPasswordPage() {
           </>
         ) : (
           <>
-            <div
-              style={{
-                width: 72,
-                height: 72,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #c8f08f, #7dc443)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 32,
-                margin: "0 auto 20px",
-                boxShadow: "0 4px 16px rgba(125,196,67,0.3)",
-              }}
-            >
-              🔑
-            </div>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #a8d8f0, #4fa3e0)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 4px 16px rgba(79,163,224,0.3)", color: "#fff" }}><Icons.Key width={32} height={32} /></div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
               Forgot Password?
             </h1>
@@ -169,7 +148,6 @@ export default function ForgotPasswordPage() {
             <div style={{ textAlign: "left", marginBottom: 20 }}>
               <label style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", display: "block", marginBottom: 6, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 Email Address
-                {touched && !emailErr && <span style={{ color: "var(--input-success)", marginLeft: 6 }}>✓</span>}
               </label>
               <input
                 type="email"
@@ -185,25 +163,21 @@ export default function ForgotPasswordPage() {
                   padding: "12px 14px",
                   borderRadius: 10,
                   fontSize: 14,
-                  border: `1.5px solid ${showErr ? "var(--input-error)" : touched && !emailErr ? "var(--input-success)" : "var(--input-border)"}`,
+                  border: `1.5px solid ${showErr ? "var(--input-error)" : "var(--input-border)"}`,
                   outline: "none",
                   fontFamily: "inherit",
                   color: "var(--text)",
                   background: "var(--input-bg)",
                   boxSizing: "border-box",
-                  boxShadow: showErr ? "0 0 0 3px rgba(239,68,68,0.12)" : touched && !emailErr ? "0 0 0 3px rgba(34,197,94,0.12)" : "none",
+                  boxShadow: showErr ? "0 0 0 3px rgba(239,68,68,0.12)" : "none",
                   transition: "border-color 0.2s, box-shadow 0.2s",
                 }}
               />
-              {showErr && (
-                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5 }}>
-                  ⚠ {emailErr}
-                </p>
-              )}
+              {showErr && <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5, display: "flex", alignItems: "center", gap: 4 }}><Icons.AlertTriangle width={12} height={12} /> {emailErr}</p>}
               {error && (
-                <p className="animate-slide-down" style={{ fontSize: 12, color: "var(--error-text)", marginTop: 5 }}>
-                  🚫 {error}
-                </p>
+                <div className="animate-slide-down" style={{ background: "var(--error-bg)", border: "1px solid var(--error-border)", borderRadius: 10, padding: "12px 16px", marginBottom: 20, fontSize: 13, color: "var(--error-text)", display: "flex", alignItems: "center", gap: 8, textAlign: "left" }}>
+                  <Icons.AlertCircle width={16} height={16} /> {error}
+                </div>
               )}
             </div>
 
@@ -232,7 +206,7 @@ export default function ForgotPasswordPage() {
               }}
             >
               {loading ? (
-                <><span className="animate-spin" style={{ display: "inline-block" }}>⟳</span> Sending...</>
+                <><Icons.Loader width={16} height={16} className="animate-spin" /> Sending...</>
               ) : "Send Reset Link →"}
             </button>
 

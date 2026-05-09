@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/shared/Toast";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
+import { Icons } from "@/components/ui/Icons";
 
 interface Stats {
   totalStudents: number;
@@ -16,7 +17,7 @@ function StatsCard({
   value,
   color,
 }: {
-  icon: string;
+  icon: React.ReactNode;
   label: string;
   value: number;
   color: string;
@@ -38,7 +39,7 @@ function StatsCard({
             {value}
           </h3>
         </div>
-        <div style={{ fontSize: 32 }}>{icon}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 48, height: 48, background: `${color}15`, color: color, borderRadius: 12 }}>{icon}</div>
       </div>
     </div>
   );
@@ -75,7 +76,7 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>Admin Dashboard 🛠️</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}>Admin Dashboard <Icons.Settings width={24} height={24} /></h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 32px" }}>Campus Portal Management</p>
 
       {loading ? (
@@ -90,24 +91,24 @@ export default function AdminDashboard() {
           }}
         >
           <StatsCard
-            icon="🎓"
+            icon={<Icons.GraduationCap width={24} height={24} />}
             label="Total Students"
             value={stats.totalStudents}
             color="#4fa3e0"
           />
           <StatsCard
-            icon="👨‍🏫"
+            icon={<Icons.Teacher width={24} height={24} />}
             label="Total Faculty"
             value={stats.totalFaculty}
             color="#7dc443"
           />
           <StatsCard
-            icon="⏳"
+            icon={<Icons.Hourglass width={24} height={24} />}
             label="Pending Requests"
             value={stats.pendingRequests}
             color="#f59e0b"
           />
-          <StatsCard icon="📚" label="Total Courses" value={stats.totalCourses} color="#8b5cf6" />
+          <StatsCard icon={<Icons.BookOpen width={24} height={24} />} label="Total Courses" value={stats.totalCourses} color="#8b5cf6" />
         </div>
       ) : null}
 
@@ -129,7 +130,7 @@ export default function AdminDashboard() {
               transition: "all 0.2s",
             }}
           >
-            👥 Manage Users
+            <Icons.Users width={18} height={18} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} /> Manage Users
           </a>
           <a
             href="/admin/faculty-requests"
@@ -146,7 +147,7 @@ export default function AdminDashboard() {
               transition: "all 0.2s",
             }}
           >
-            👨‍🏫 Faculty Requests
+            <Icons.Teacher width={18} height={18} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} /> Faculty Requests
           </a>
           <a
             href="/admin/courses"
@@ -163,7 +164,7 @@ export default function AdminDashboard() {
               transition: "all 0.2s",
             }}
           >
-            📚 Manage Courses
+            <Icons.BookOpen width={18} height={18} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} /> Manage Courses
           </a>
         </div>
       </div>

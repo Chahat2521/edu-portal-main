@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/shared/Toast";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
+import { Icons } from "@/components/ui/Icons";
 
 export default function StudentGradesPage() {
   const { showToast } = useToast();
@@ -48,7 +49,7 @@ export default function StudentGradesPage() {
 
   return (
     <div style={{ padding: "32px" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>📊 My Grades</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><Icons.Chart width={24} height={24} /> My Grades</h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 32px" }}>View your academic performance</p>
 
       {loading ? (

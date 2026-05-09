@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/components/shared/Toast";
 import LoadingSkeleton from "@/components/shared/LoadingSkeleton";
+import { Icons } from "@/components/ui/Icons";
 
 export default function StudentCoursesPage() {
   const { showToast } = useToast();
@@ -34,7 +35,7 @@ export default function StudentCoursesPage() {
 
   return (
     <div style={{ padding: "32px" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px" }}>📚 My Courses</h1>
+      <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><Icons.BookOpen width={24} height={24} /> My Courses</h1>
       <p style={{ fontSize: 14, color: "#666", margin: "0 0 32px" }}>Active course enrollments</p>
 
       {loading ? (

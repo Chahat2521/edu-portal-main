@@ -9,6 +9,8 @@ export interface IUser extends Document {
   employeeId?: string;
   department?: string;
   semester?: number;
+  avatar?: string;
+  bio?: string;
   createdAt?: Date;
 }
 
@@ -26,6 +28,8 @@ const UserSchema = new Schema<IUser>(
     employeeId: { type: String },
     department: { type: String },
     semester: { type: Number },
+    avatar: { type: String },
+    bio: { type: String },
   },
   { timestamps: true }
 );

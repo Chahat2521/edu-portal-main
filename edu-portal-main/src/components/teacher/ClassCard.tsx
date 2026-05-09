@@ -1,5 +1,5 @@
 interface ClassCardProps {
-  icon: string;
+  icon: React.ReactNode;
   name: string;
   color: string;
 }

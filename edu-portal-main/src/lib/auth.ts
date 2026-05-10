@@ -32,7 +32,12 @@ export function getTokenFromHeader(req: NextRequest): string | null {
 export function getUserFromRequest(req: NextRequest): any {
   const token = getTokenFromHeader(req);
   if (!token) return null;
-  return verifyToken(token);
+  const payload = verifyToken(token);
+  if (!payload) return null;
+  // Normalize: JWT is signed with {id} but many APIs use user.sub (standard claim)
+  // Map id → sub so both work
+  if (payload.id && !payload.sub) payload.sub = payload.id;
+  return payload;
 }
 
 // Check if user has required role

@@ -75,7 +75,7 @@ export default function GradeSubmissionModal({ isOpen, onClose, onSubmit, studen
           <button type="button" onClick={onClose} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontWeight: 600 }}>
             Cancel
           </button>
-          <button type="submit" style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#7dc443", color: "#fff", cursor: "pointer", fontWeight: 600 }}>
+          <button type="submit" style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#1e3a5f", color: "#fff", cursor: "pointer", fontWeight: 600 }}>
             Submit Grade
           </button>
         </div>

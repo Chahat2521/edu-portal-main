@@ -55,13 +55,13 @@ export default function EmptyState({
             padding: "10px 28px",
             borderRadius: 10,
             border: "none",
-            background: "#7dc443",
+            background: "#1e3a5f",
             color: "white",
             cursor: "pointer",
             fontSize: 14,
             fontWeight: 700,
             fontFamily: "inherit",
-            boxShadow: "0 4px 12px rgba(125,196,67,0.3)",
+            boxShadow: "0 4px 12px rgba(30,58,95,0.25)",
             transition: "all 0.15s ease",
           }}
         >

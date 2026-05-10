@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense, type KeyboardEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Icons } from "@/components/ui/Icons";
 
 function getStrength(pw: string) {
   if (!pw) return { score: 0, label: "", color: "transparent" };
@@ -16,7 +17,7 @@ function getStrength(pw: string) {
   if (score <= 3) return { score: 2, label: "Fair",      color: "#f59e0b" };
   if (score <= 4) return { score: 3, label: "Good",      color: "#3b82f6" };
   if (score <= 5) return { score: 4, label: "Strong",    color: "#22c55e" };
-  return            { score: 5, label: "Very Strong", color: "#7dc443" };
+  return            { score: 5, label: "Very Strong", color: "#4fa3e0" };
 }
 
 function validatePassword(v: string) {
@@ -39,6 +40,7 @@ function ResetPasswordForm() {
   const [loading, setLoading]         = useState(false);
   const [success, setSuccess]         = useState(false);
   const [error, setError]             = useState("");
+  const [shake, setShake]             = useState(false);
   const [touched, setTouched]         = useState({ pw: false, confirm: false });
 
   const passErr    = validatePassword(password);
@@ -49,10 +51,18 @@ function ResetPasswordForm() {
     if (!token) setError("Invalid reset link. Please request a new one.");
   }, [token]);
 
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 400);
+  };
+
   const handleSubmit = async () => {
     setTouched({ pw: true, confirm: true });
     setError("");
-    if (passErr || confirmErr || !token) return;
+    if (passErr || confirmErr || !token) {
+      triggerShake();
+      return;
+    }
 
     setLoading(true);
     try {
@@ -62,33 +72,40 @@ function ResetPasswordForm() {
         body: JSON.stringify({ token, password }),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.error || "Something went wrong"); return; }
+      if (!res.ok) { setError(data.error || "Something went wrong"); triggerShake(); return; }
       setSuccess(true);
       setTimeout(() => router.push("/login"), 3000);
     } catch {
       setError("Network error. Please try again.");
+      triggerShake();
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", fontFamily: "'DM Sans', sans-serif", padding: 16 }}>
-      <div className={`animate-fade-in ${shake ? "animate-shake" : ""}`} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24, padding: "48px 44px", maxWidth: 440, width: "100%", boxShadow: "var(--shadow-lg)", textAlign: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", fontFamily: "'DM Sans', sans-serif", padding: 16 }}>
+      <div className={`animate-fade-in${shake ? " animate-shake" : ""}`} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 24, padding: "48px 44px", maxWidth: 440, width: "100%", boxShadow: "var(--shadow-lg)", textAlign: "center" }}>
         {success ? (
           <>
-            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}><Icons.Check width={64} height={64} style={{ color: "#7dc443" }} /></div>
+            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center" }}>
+              <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #a8d8f0, #4fa3e0)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                <Icons.Check width={40} height={40} />
+              </div>
+            </div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 12px" }}>Password Reset!</h1>
             <p style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.7, marginBottom: 24 }}>
               Your password has been reset successfully. Redirecting you to login...
             </p>
             <div style={{ height: 4, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
-              <div style={{ height: "100%", background: "#7dc443", borderRadius: 99, width: "100%", transition: "width 3s linear" }} />
+              <div style={{ height: "100%", background: "#4fa3e0", borderRadius: 99, width: "100%", transition: "width 3s linear" }} />
             </div>
           </>
         ) : (
           <>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #c8f08f, #7dc443)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 4px 16px rgba(125,196,67,0.3)", color: "#fff" }}><Icons.Lock width={32} height={32} /></div>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", background: "linear-gradient(135deg, #a8d8f0, #4fa3e0)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 4px 16px rgba(79,163,224,0.3)", color: "#fff" }}>
+              <Icons.Lock width={32} height={32} />
+            </div>
             <h1 style={{ fontSize: 24, fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>Reset Password</h1>
             <p style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.6, marginBottom: 28 }}>Create a strong new password for your account.</p>
 
@@ -167,10 +184,10 @@ function ResetPasswordForm() {
               style={{
                 width: "100%", padding: "13px 0", borderRadius: 12, border: "none",
                 cursor: loading || !token ? "not-allowed" : "pointer",
-                background: loading || !token ? "var(--border)" : "linear-gradient(135deg, #7dc443, #a8e063)",
+                background: loading || !token ? "var(--border)" : "#1e3a5f",
                 color: loading || !token ? "var(--muted)" : "#fff",
                 fontWeight: 800, fontSize: 15, fontFamily: "inherit",
-                boxShadow: "0 4px 14px rgba(125,196,67,0.3)",
+                boxShadow: "0 4px 14px rgba(30,58,95,0.3)",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 marginBottom: 20, transition: "all 0.2s ease",
               }}
@@ -179,7 +196,7 @@ function ResetPasswordForm() {
             </button>
 
             <Link href="/login" style={{ fontSize: 13, color: "var(--muted)", fontWeight: 500 }}>
-              ← <span style={{ color: "#7dc443", fontWeight: 700 }}>Back to Login</span>
+              ← <span style={{ color: "#1e3a5f", fontWeight: 700 }}>Back to Login</span>
             </Link>
           </>
         )}
@@ -190,7 +207,7 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff" }}><p style={{ color: "var(--muted)" }}>Loading...</p></div>}>
+    <Suspense fallback={<div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}><p style={{ color: "var(--muted)" }}>Loading...</p></div>}>
       <ResetPasswordForm />
     </Suspense>
   );

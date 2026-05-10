@@ -5,11 +5,14 @@ import Link from "next/link";
 import ProfileDropdown from "@/components/shared/ProfileDropdown";
 import NotificationDropdown from "@/components/shared/NotificationDropdown";
 import { Icons } from "@/components/ui/Icons";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const NAV_LINKS = [
   { href: "/teacher",             icon: Icons.Dashboard,   label: "Dashboard"   },
   { href: "/teacher/courses",     icon: Icons.Courses,     label: "Courses"     },
   { href: "/teacher/assignments", icon: Icons.Assignments, label: "Assignments" },
+  { href: "/teacher/attendance",  icon: Icons.Attendance,  label: "Attendance"  },
+  { href: "/teacher/exam-grades", icon: Icons.Trophy,      label: "Exam Grades" },
   { href: "/teacher/resources",   icon: Icons.Resources,   label: "Resources"   },
 ];
 
@@ -47,48 +50,31 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
         position: "fixed",
         height: "100vh",
         overflowY: "auto",
+        overflowX: "hidden",
         zIndex: 200,
         boxShadow: "2px 0 20px rgba(0,0,0,0.15)",
         transition: "width 0.3s ease, padding 0.3s ease",
       }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "flex-start" : "center", marginBottom: 32, position: "relative" }}>
+        {/* Logo row */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: isOpen ? "flex-start" : "center", marginBottom: 0, minHeight: 40 }}>
           {isOpen && (
             <Link href="/teacher" style={{ textDecoration: "none", flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icons.GraduationCap width={20} height={20} /></div>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 900, color: "#fff", letterSpacing: 0.5 }}>Academia</div>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>Faculty Portal</div>
+                <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}><Icons.GraduationCap width={20} height={20} /></div>
+                <div style={{ overflow: "hidden" }}>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: "#fff", letterSpacing: 0.5, whiteSpace: "nowrap" }}>Academia</div>
+                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", fontWeight: 600, whiteSpace: "nowrap" }}>Faculty Portal</div>
                 </div>
               </div>
             </Link>
           )}
           {!isOpen && (
-            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", marginBottom: 16 }}><Icons.GraduationCap width={20} height={20} /></div>
+            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}><Icons.GraduationCap width={20} height={20} /></div>
           )}
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            style={{ 
-              position: "absolute",
-              right: isOpen ? -28 : -24, 
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "var(--card)", 
-              border: "1px solid var(--border)", 
-              borderRadius: "50%", 
-              width: 24,
-              height: 24,
-              cursor: "pointer", 
-              color: "var(--text)", 
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 201,
-              boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
-            }}>
-            {isOpen ? <Icons.ChevronLeft width={14} height={14} /> : <Icons.ChevronRight width={14} height={14} />}
-          </button>
         </div>
+
+        {/* Horizontal divider */}
+        <div style={{ height: 1, background: "rgba(255,255,255,0.1)", margin: "16px 0" }} />
 
         {/* Nav */}
         <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: 3 }}>
@@ -99,6 +85,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
                 key={href}
                 href={href}
                 title={!isOpen ? label : undefined}
+                className="sidebar-link"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -111,7 +98,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
                   fontWeight: active ? 700 : 500,
                   color: active ? "#fff" : "rgba(255,255,255,0.65)",
                   background: active ? "rgba(255,255,255,0.12)" : "transparent",
-                  borderLeft: active && isOpen ? "3px solid #7dc443" : "3px solid transparent",
+                  borderLeft: active && isOpen ? "3px solid rgba(255,255,255,0.9)" : "3px solid transparent",
                   transition: "all 0.15s ease",
                 }}
               >
@@ -134,6 +121,32 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
           </button>
         </div>
       </aside>
+
+      {/* ── Floating sidebar toggle ── */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        title={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+        style={{
+          position: "fixed",
+          left: isOpen ? 226 : 66,
+          top: 22,
+          zIndex: 300,
+          width: 28,
+          height: 28,
+          borderRadius: "50%",
+          background: "var(--card)",
+          border: "1px solid var(--border)",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.25)",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "var(--text)",
+          transition: "left 0.3s ease",
+        }}
+      >
+        {isOpen ? <Icons.ChevronLeft width={14} height={14} /> : <Icons.ChevronRight width={14} height={14} />}
+      </button>
 
       {/* ── Top navbar & Main Content ─────────────────────── */}
       <div style={{ marginLeft: isOpen ? 240 : 80, flex: 1, display: "flex", flexDirection: "column", transition: "margin-left 0.3s ease" }}>
@@ -165,6 +178,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
 
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginLeft: 20 }}>
+            <ThemeToggle />
             <NotificationDropdown />
             <ProfileDropdown user={user} roleLabel="Faculty" />
           </div>

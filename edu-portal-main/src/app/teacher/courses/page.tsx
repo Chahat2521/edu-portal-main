@@ -6,6 +6,11 @@ import Button from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
 import Modal from "@/components/shared/Modal";
 
+const getToken = () => {
+  try { return JSON.parse(localStorage.getItem("edu_user") || "{}").token || ""; }
+  catch { return ""; }
+};
+
 export default function TeacherCoursesPage() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +24,9 @@ export default function TeacherCoursesPage() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch("/api/teacher/courses");
+      const res = await fetch("/api/teacher/courses", {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
       const data = await res.json();
       if (res.ok) setCourses(data.courses || []);
     } catch (err) {
@@ -35,7 +42,7 @@ export default function TeacherCoursesPage() {
     try {
       const res = await fetch("/api/teacher/courses", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify(newCourse),
       });
       const data = await res.json();
@@ -145,7 +152,7 @@ export default function TeacherCoursesPage() {
             <button type="button" onClick={() => setIsModalOpen(false)} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontWeight: 600 }}>
               Cancel
             </button>
-            <button type="submit" style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#7dc443", color: "#fff", cursor: "pointer", fontWeight: 600 }}>
+            <button type="submit" style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#1e3a5f", color: "#fff", cursor: "pointer", fontWeight: 600 }}>
               Create Course
             </button>
           </div>

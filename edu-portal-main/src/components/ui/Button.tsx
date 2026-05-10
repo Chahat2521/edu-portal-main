@@ -15,7 +15,7 @@ export default function Button({
   children,
   onClick,
   variant = "primary",
-  color = "#7dc443",
+  color = "#1e3a5f",
   fullWidth = false,
   disabled = false,
   type = "button",

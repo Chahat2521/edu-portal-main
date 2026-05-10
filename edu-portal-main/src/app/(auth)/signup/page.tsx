@@ -98,6 +98,8 @@ export default function SignupPage() {
   const [pendingApproval, setPendingApproval] = useState(false);
   const [successStudent, setSuccessStudent] = useState(false);
 
+  const isStudent = role === "student";
+
   const [touched, setTouched] = useState({
     name: false, email: false, password: false,
     enrollmentNumber: false, employeeId: false,
@@ -237,10 +239,6 @@ export default function SignupPage() {
   /* ── Main form ──────────────────────────────────────────── */
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'DM Sans', sans-serif", background: "var(--bg)" }}>
-      {/* Global Theme toggle fixed top-right */}
-      <div style={{ position: "fixed", top: 20, right: 20, zIndex: 100 }}>
-        <ThemeToggle />
-      </div>
 
       {/* Left panel */}
       <div

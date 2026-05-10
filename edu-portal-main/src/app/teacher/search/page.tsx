@@ -14,14 +14,14 @@ export default function TeacherSearchPage() {
 
   useEffect(() => {
     if (query) {
-      // In a real application, you would make an API call to a global search route.
-      // Here we simulate searching by fetching existing data locally.
       const searchData = async () => {
         setLoading(true);
         try {
+          const userToken = JSON.parse(localStorage.getItem("edu_user") || "{}").token;
+          const headers = { "Authorization": `Bearer ${userToken}` };
           const [coursesRes, assignmentsRes] = await Promise.all([
-            fetch("/api/teacher/courses"),
-            fetch("/api/teacher/assignments")
+            fetch("/api/teacher/courses", { headers }),
+            fetch("/api/teacher/assignments", { headers })
           ]);
           const coursesData = await coursesRes.json();
           const assignmentsData = await assignmentsRes.json();
@@ -29,9 +29,9 @@ export default function TeacherSearchPage() {
           const lowerQ = query.toLowerCase();
           
           setResults({
-            courses: (coursesData.courses || []).filter((c: any) => c.title.toLowerCase().includes(lowerQ) || c.code.toLowerCase().includes(lowerQ)),
-            assignments: (assignmentsData.assignments || []).filter((a: any) => a.title.toLowerCase().includes(lowerQ)),
-            students: [] // Assuming we don't have a direct student API for teachers yet
+            courses: (coursesData.courses || []).filter((c: any) => (c.name || c.title || "").toLowerCase().includes(lowerQ) || (c.code || "").toLowerCase().includes(lowerQ)),
+            assignments: (assignmentsData.assignments || []).filter((a: any) => (a.title || "").toLowerCase().includes(lowerQ)),
+            students: []
           });
         } catch (e) {
           console.error(e);
@@ -66,7 +66,7 @@ export default function TeacherSearchPage() {
                 {results.courses.map(course => (
                   <Card key={course._id}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>{course.title}</h3>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>{course.name || course.title}</h3>
                       <span style={{ fontSize: 12, fontWeight: 600, background: "var(--bg-secondary)", padding: "4px 8px", borderRadius: 6, color: "var(--muted)" }}>{course.code}</span>
                     </div>
                   </Card>

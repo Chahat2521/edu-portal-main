@@ -5,6 +5,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
 import Modal from "@/components/shared/Modal";
+import { useGlobalSearch } from "@/contexts/SearchContext";
 
 function getAuthHeader() {
   try {
@@ -40,6 +41,7 @@ export default function TeacherAssignmentsPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { searchQuery } = useGlobalSearch();
 
   useEffect(() => {
     fetchAssignments();
@@ -195,7 +197,7 @@ export default function TeacherAssignmentsPage() {
         </Card>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-          {assignments.map((assignment) => (
+          {assignments.filter(a => (a.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || (a.courseName || "").toLowerCase().includes(searchQuery.toLowerCase())).map((assignment) => (
             <Card key={assignment._id} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                 <h3 style={{ fontSize: 15, fontWeight: 700, color: "var(--text)", flex: 1 }}>{assignment.title}</h3>

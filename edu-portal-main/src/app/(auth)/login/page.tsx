@@ -300,8 +300,9 @@ export default function LoginPage() {
           </div>
 
           {/* Admin hint */}
-          <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", marginBottom: 24, fontSize: 13, color: "var(--muted)", display: "flex", alignItems: "center", gap: 8 }}>
-            <Icons.Lightbulb width={16} height={16} /> Admin? Use <strong>admin@campusportal.com</strong> with your admin password
+          <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", marginBottom: 24, fontSize: 13, color: "var(--muted)", display: "flex", alignItems: "flex-start", gap: 8 }}>
+            <Icons.Lightbulb width={16} height={16} style={{ flexShrink: 0, marginTop: 2 }} /> 
+            <span>Admin? Use <strong>admin@campusportal.com</strong> with your admin password</span>
           </div>
 
           {/* Email */}

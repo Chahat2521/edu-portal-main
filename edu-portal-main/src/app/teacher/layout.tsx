@@ -6,12 +6,14 @@ import ProfileDropdown from "@/components/shared/ProfileDropdown";
 import NotificationDropdown from "@/components/shared/NotificationDropdown";
 import { Icons } from "@/components/ui/Icons";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useGlobalSearch } from "@/contexts/SearchContext";
 
 const NAV_LINKS = [
   { href: "/teacher",             icon: Icons.Dashboard,   label: "Dashboard"   },
   { href: "/teacher/courses",     icon: Icons.Courses,     label: "Courses"     },
   { href: "/teacher/assignments", icon: Icons.Assignments, label: "Assignments" },
   { href: "/teacher/attendance",  icon: Icons.Attendance,  label: "Attendance"  },
+  { href: "/teacher/timetable",   icon: Icons.Calendar,    label: "Timetable"   },
   { href: "/teacher/exam-grades", icon: Icons.Trophy,      label: "Exam Grades" },
   { href: "/teacher/resources",   icon: Icons.Resources,   label: "Resources"   },
 ];
@@ -21,7 +23,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useGlobalSearch();
 
   useEffect(() => {
     const stored = localStorage.getItem("edu_user");
@@ -166,14 +168,17 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
           {/* Search bar */}
           <div style={{ display: "flex", alignItems: "center", gap: 10, background: "var(--bg-secondary)", borderRadius: 10, padding: "9px 16px", border: "1px solid var(--border)", maxWidth: 420, flex: 1 }}>
             <span style={{ color: "var(--muted)", display: "flex" }}><Icons.Search width={18} height={18} /></span>
-            <form onSubmit={(e) => { e.preventDefault(); if (searchQuery) router.push(`/teacher/search?q=${encodeURIComponent(searchQuery)}`); }} style={{ width: "100%", margin: 0, padding: 0 }}>
-              <input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search courses, assignments, or students..."
-                style={{ border: "none", background: "transparent", outline: "none", fontSize: 14, color: "var(--text)", width: "100%", fontFamily: "inherit" }}
-              />
-            </form>
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search courses, assignments, or students..."
+              style={{ border: "none", background: "transparent", outline: "none", fontSize: 14, color: "var(--text)", width: "100%", fontFamily: "inherit" }}
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", padding: 2, color: "var(--muted)" }}>
+                <Icons.X width={16} height={16} />
+              </button>
+            )}
           </div>
 
           {/* Right side */}

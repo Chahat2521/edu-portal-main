@@ -5,6 +5,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
 import Modal from "@/components/shared/Modal";
+import { useGlobalSearch } from "@/contexts/SearchContext";
 
 const getToken = () => {
   try { return JSON.parse(localStorage.getItem("edu_user") || "{}").token || ""; }
@@ -15,8 +16,9 @@ export default function TeacherCoursesPage() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newCourse, setNewCourse] = useState({ title: "", description: "", code: "", department: "" });
+  const [newCourse, setNewCourse] = useState({ title: "", description: "", code: "", department: "", semester: "1" });
   const [error, setError] = useState("");
+  const { searchQuery } = useGlobalSearch();
 
   useEffect(() => {
     fetchCourses();
@@ -49,7 +51,7 @@ export default function TeacherCoursesPage() {
       if (!res.ok) throw new Error(data.error || "Failed to create course");
       setCourses([data.course, ...courses]);
       setIsModalOpen(false);
-      setNewCourse({ title: "", description: "", code: "", department: "" });
+      setNewCourse({ title: "", description: "", code: "", department: "", semester: "1" });
     } catch (err: any) {
       setError(err.message);
     }
@@ -79,10 +81,10 @@ export default function TeacherCoursesPage() {
         </Card>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
-          {courses.map(course => (
+          {courses.filter(c => (c.name || c.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || (c.code || "").toLowerCase().includes(searchQuery.toLowerCase())).map(course => (
             <Card key={course._id} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>{course.title}</h3>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>{course.name || course.title}</h3>
                 <span style={{ fontSize: 12, fontWeight: 600, background: "var(--bg-secondary)", padding: "4px 8px", borderRadius: 6, color: "var(--muted)" }}>{course.code}</span>
               </div>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5, flex: 1 }}>{course.description}</p>
@@ -115,26 +117,35 @@ export default function TeacherCoursesPage() {
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Course Code</label>
-              <input 
-                value={newCourse.code} 
-                onChange={e => setNewCourse({...newCourse, code: e.target.value})} 
+              <input
+                value={newCourse.code}
+                onChange={e => setNewCourse({...newCourse, code: e.target.value})}
                 placeholder="e.g. CS301"
-                style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", color: "var(--text)", outline: "none", fontSize: 14 }}
-                required 
+                style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", color: "var(--text)", outline: "none", fontSize: 14, fontFamily: "inherit" }}
+                required
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Department</label>
-              <input 
-                value={newCourse.department} 
-                onChange={e => setNewCourse({...newCourse, department: e.target.value})} 
-                placeholder="e.g. Computer Science"
-                style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", color: "var(--text)", outline: "none", fontSize: 14 }}
-                required 
+              <input
+                value={newCourse.department}
+                onChange={e => setNewCourse({...newCourse, department: e.target.value})}
+                placeholder="e.g. CSE"
+                style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", color: "var(--text)", outline: "none", fontSize: 14, fontFamily: "inherit" }}
               />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>Semester</label>
+              <select
+                value={newCourse.semester}
+                onChange={e => setNewCourse({...newCourse, semester: e.target.value})}
+                style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 12px", color: "var(--text)", outline: "none", fontSize: 14, fontFamily: "inherit" }}
+              >
+                {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={s}>Semester {s}</option>)}
+              </select>
             </div>
           </div>
 

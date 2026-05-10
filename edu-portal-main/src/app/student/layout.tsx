@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import ProfileDropdown from "@/components/shared/ProfileDropdown";
+import NotificationDropdown from "@/components/shared/NotificationDropdown";
 import { Icons } from "@/components/ui/Icons";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { SearchProvider, useGlobalSearch } from "@/contexts/SearchContext";
 
 const NAV_LINKS = [
   { href: "/student",              icon: Icons.Dashboard,   label: "Dashboard"     },
   { href: "/student/courses",     icon: Icons.Courses,     label: "My Courses"    },
   { href: "/student/assignments", icon: Icons.Assignments, label: "Assignments"   },
   { href: "/student/attendance",  icon: Icons.Attendance,  label: "Attendance"    },
-  { href: "/student/grades",      icon: Icons.Grades,      label: "Grades"        },
   { href: "/student/exam-grades", icon: Icons.Trophy,      label: "Exam Grades"   },
   { href: "/student/resources",   icon: Icons.Resources,   label: "Resources"     },
   { href: "/student/groups",      icon: Icons.Groups,      label: "Study Groups"  },
@@ -22,6 +23,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(true);
+  const { searchQuery, setSearchQuery } = useGlobalSearch();
 
   useEffect(() => {
     const stored = localStorage.getItem("edu_user");
@@ -164,18 +166,22 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           <div style={{ display: "flex", alignItems: "center", gap: 10, background: "var(--bg-secondary)", borderRadius: 10, padding: "9px 16px", border: "1px solid var(--border)", maxWidth: 420, flex: 1 }}>
             <span style={{ color: "var(--muted)", display: "flex" }}><Icons.Search width={18} height={18} /></span>
             <input
-              placeholder="Search courses, faculty, or resources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search courses, assignments, grades..."
               style={{ border: "none", background: "transparent", outline: "none", fontSize: 14, color: "var(--text)", width: "100%", fontFamily: "inherit" }}
             />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", padding: 2, color: "var(--muted)" }}>
+                <Icons.X width={16} height={16} />
+              </button>
+            )}
           </div>
 
           {/* Right side */}
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginLeft: 20 }}>
             <ThemeToggle />
-            <div style={{ position: "relative", cursor: "pointer", display: "flex", color: "var(--text)" }}>
-              <Icons.Bell width={22} height={22} />
-              <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: "#f43f5e", borderRadius: "50%", border: "2px solid var(--nav-bg)", display: "block" }} />
-            </div>
+            <NotificationDropdown />
             <ProfileDropdown user={user} roleLabel="Computer Science, Year 3" />
           </div>
         </header>

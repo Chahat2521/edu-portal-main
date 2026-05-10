@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
 
     await connectDB();
     const courses = await Course.find({ teacherId: user.sub }).sort({ createdAt: -1 });
-
     return NextResponse.json({ courses });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -26,8 +25,16 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
     const course = await Course.create({
-      ...body,
-      teacherId: user.sub,
+      // frontend sends "title", model requires "name"
+      name:         body.name || body.title || "Untitled Course",
+      code:         body.code || `C-${Date.now()}`,
+      description:  body.description || "",
+      semester:     Number(body.semester) || 1,
+      teacherId:    user.sub,
+      teacherName:  user.name || "Faculty",
+      department:   body.department || "",
+      icon:         body.icon  || "📚",
+      color:        body.color || "#e8f5e9",
     });
 
     return NextResponse.json({ course }, { status: 201 });
@@ -35,3 +42,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+

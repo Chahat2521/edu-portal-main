@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Icons } from "@/components/ui/Icons";
 import Card from "@/components/ui/Card";
+import { useGlobalSearch } from "@/contexts/SearchContext";
 
 const getToken = () => {
   try { return JSON.parse(localStorage.getItem("edu_user") || "{}").token || ""; }
@@ -25,6 +26,7 @@ export default function StudentExamGradesPage() {
   const [grades, setGrades]   = useState<ExamGrade[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter]   = useState("all");
+  const { searchQuery } = useGlobalSearch();
 
   const fetchGrades = useCallback(async () => {
     try {
@@ -39,7 +41,11 @@ export default function StudentExamGradesPage() {
 
   useEffect(() => { fetchGrades(); }, [fetchGrades]);
 
-  const filtered = filter === "all" ? grades : grades.filter(g => g.examType === filter);
+  const filteredByType = filter === "all" ? grades : grades.filter(g => g.examType === filter);
+  const filtered = filteredByType.filter(g => 
+    (g.subject || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (g.subjectCode || "").toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Overall GPA-like metric
   const overall = grades.length

@@ -12,13 +12,19 @@ export default function NotificationDropdown() {
   useEffect(() => {
     fetchNotifications();
 
+    // Poll every 30s so teacher-triggered notifications appear automatically
+    const interval = setInterval(fetchNotifications, 30_000);
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const fetchNotifications = async () => {
@@ -104,15 +110,26 @@ export default function NotificationDropdown() {
               </div>
             ) : (
               notifications.map((notif) => (
-                <div key={notif._id} style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)", display: "flex", gap: 12, background: notif.read ? "transparent" : "var(--bg-secondary)", transition: "background 0.2s" }}>
+                <div
+                  key={notif._id}
+                  onClick={() => {
+                    if (notif.link) window.location.href = notif.link;
+                    setIsOpen(false);
+                  }}
+                  style={{
+                    padding: "12px 16px", borderBottom: "1px solid var(--border)", display: "flex",
+                    gap: 12, background: notif.read ? "transparent" : "var(--bg-secondary)",
+                    transition: "background 0.2s", cursor: notif.link ? "pointer" : "default",
+                  }}
+                >
                   <div style={{ width: 32, height: 32, borderRadius: "50%", background: getBgForType(notif.type), display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     {getIconForType(notif.type)}
                   </div>
-                  <div>
+                  <div style={{ flex: 1 }}>
                     <h4 style={{ fontSize: 13, fontWeight: 600, margin: "0 0 4px", color: "var(--text)" }}>{notif.title}</h4>
                     <p style={{ fontSize: 12, margin: 0, color: "var(--muted)", lineHeight: 1.4 }}>{notif.message}</p>
                     <span style={{ fontSize: 11, color: "var(--muted-light)", display: "block", marginTop: 6 }}>
-                      {new Date(notif.createdAt).toLocaleDateString()} at {new Date(notif.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                      {new Date(notif.createdAt).toLocaleDateString()} at {new Date(notif.createdAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
                     </span>
                   </div>
                 </div>

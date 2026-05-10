@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Card from "@/components/ui/Card";
 import { Icons } from "@/components/ui/Icons";
 import Modal from "@/components/shared/Modal";
+import { useGlobalSearch } from "@/contexts/SearchContext";
 
 function getAuthHeader() {
   try {
@@ -43,6 +44,7 @@ export default function StudentAssignmentsPage() {
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { searchQuery } = useGlobalSearch();
 
   useEffect(() => {
     fetchAssignments();
@@ -148,7 +150,11 @@ export default function StudentAssignmentsPage() {
     return diff;
   };
 
-  const filtered = filter === "all" ? assignments : assignments.filter((a) => a.status === filter);
+  const filteredByStatus = filter === "all" ? assignments : assignments.filter((a) => a.status === filter);
+  const filtered = filteredByStatus.filter(a => 
+    (a.title || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (a.courseName || "").toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const stats = {
     total: assignments.length,

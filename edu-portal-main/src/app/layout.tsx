@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { ToastProvider } from "@/components/shared/Toast";
 import ThemeInitializer from "@/components/theme/ThemeInitializer";
+import { SearchProvider } from "@/contexts/SearchContext";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${dmSans.variable} font-sans`} style={{ margin: 0 }}>
         <ThemeInitializer />
-        <ToastProvider>{children}</ToastProvider>
+        <SearchProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </SearchProvider>
       </body>
     </html>
   );

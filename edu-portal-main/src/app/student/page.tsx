@@ -20,42 +20,50 @@ function StatCard({ icon, label, value, sub, color }: { icon: React.ReactNode; l
 /* ── Enrolled course card (with progress bar) ─────────────── */
 function EnrolledCourseCard({ course }: { course: { name: string; code: string; progress: number; nextUp: string; nextDate: string; status: string; color: string } }) {
   return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px", boxShadow: "var(--shadow-sm)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-        <div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: course.color }}>{course.name}</div>
-          <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>{course.code}</div>
+    <Link href="/student/courses" style={{ textDecoration: "none" }}>
+      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px", boxShadow: "var(--shadow-sm)", height: "100%", transition: "transform 0.15s ease", cursor: "pointer" }}
+           onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-2px)"}
+           onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: course.color }}>{course.name}</div>
+            <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>{course.code}</div>
+          </div>
+          <span style={{ background: "#dcfce7", color: "#166534", fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 99, whiteSpace: "nowrap" }}>{course.status}</span>
         </div>
-        <span style={{ background: "#dcfce7", color: "#166534", fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 99, whiteSpace: "nowrap" }}>{course.status}</span>
-      </div>
-      <div style={{ marginBottom: 10 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-          <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>Progress</span>
-          <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)" }}>{course.progress}%</span>
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>Progress</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "var(--text)" }}>{course.progress}%</span>
+          </div>
+          <div style={{ height: 7, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${course.progress}%`, background: "#1e3a5f", borderRadius: 99, transition: "width 0.8s ease" }} />
+          </div>
         </div>
-        <div style={{ height: 7, background: "var(--border)", borderRadius: 99, overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${course.progress}%`, background: "#1e3a5f", borderRadius: 99, transition: "width 0.8s ease" }} />
+        <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", alignItems: "center", gap: 5 }}>
+          <Icons.Calendar width={14} height={14} />
+          <span>Up next: <strong style={{ color: "var(--text)" }}>{course.nextUp}</strong> ({course.nextDate})</span>
         </div>
       </div>
-      <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", alignItems: "center", gap: 5 }}>
-        <Icons.Calendar width={14} height={14} />
-        <span>Up next: <strong style={{ color: "var(--text)" }}>{course.nextUp}</strong> ({course.nextDate})</span>
-      </div>
-    </div>
+    </Link>
   );
 }
 
 /* ── Schedule item ──────────────────────────────────────────── */
 function ScheduleItem({ time, title, location, accent }: { time: string; title: string; location: string; accent: string }) {
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
-      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", minWidth: 54, textAlign: "right", paddingTop: 2 }}>{time}</div>
-      <div style={{ width: 3, height: 40, background: accent, borderRadius: 99, flexShrink: 0, marginTop: 2 }} />
-      <div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{title}</div>
-        <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", alignItems: "center", gap: 4 }}><Icons.MapPin width={14} height={14} /> {location}</div>
+    <Link href="/student/timetable" style={{ textDecoration: "none", display: "block" }}>
+      <div style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 0", borderBottom: "1px solid var(--border)", transition: "background 0.15s ease", cursor: "pointer", borderRadius: 8 }}
+           onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-secondary)"}
+           onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", minWidth: 54, textAlign: "right", paddingTop: 2, paddingLeft: 8 }}>{time}</div>
+        <div style={{ width: 3, height: 40, background: accent, borderRadius: 99, flexShrink: 0, marginTop: 2 }} />
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{title}</div>
+          <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", alignItems: "center", gap: 4 }}><Icons.MapPin width={14} height={14} /> {location}</div>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -204,7 +212,7 @@ export default function StudentDashboard() {
               <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>{new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
             </div>
             {schedule.map((s) => <ScheduleItem key={s.title} {...s} />)}
-            <Link href="/student/courses" style={{ display: "block", textAlign: "center", marginTop: 14, background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 10, padding: "9px 0", fontSize: 13, fontWeight: 700, color: "var(--text-secondary)", textDecoration: "none" }}>
+            <Link href="/student/timetable" style={{ display: "block", textAlign: "center", marginTop: 14, background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: 10, padding: "9px 0", fontSize: 13, fontWeight: 700, color: "var(--text-secondary)", textDecoration: "none" }}>
               View Full Calendar →
             </Link>
           </div>

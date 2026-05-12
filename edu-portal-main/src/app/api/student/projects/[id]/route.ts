@@ -5,14 +5,15 @@ import { getUserFromRequest } from "@/lib/auth";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     await connectDB();
-    const project = await Project.findById(params.id);
+    const { id } = await params;
+    const project = await Project.findById(id);
 
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
@@ -22,7 +23,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await Project.deleteOne({ _id: params.id });
+    await Project.deleteOne({ _id: id });
     return NextResponse.json({ message: "Project deleted" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

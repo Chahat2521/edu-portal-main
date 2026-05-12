@@ -5,7 +5,7 @@ import { requireRole } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { user, error } = requireRole(req, "teacher");
@@ -13,8 +13,9 @@ export async function PATCH(
 
     const body = await req.json();
     await connectDB();
+    const { id } = await params;
 
-    const task = await Task.findById(params.id);
+    const task = await Task.findById(id);
     if (!task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
@@ -23,7 +24,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const updated = await Task.findByIdAndUpdate(params.id, body, { new: true });
+    const updated = await Task.findByIdAndUpdate(id, body, { new: true });
     return NextResponse.json({ task: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -32,14 +33,15 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { user, error } = requireRole(req, "teacher");
     if (error) return error;
 
     await connectDB();
-    const task = await Task.findById(params.id);
+    const { id } = await params;
+    const task = await Task.findById(id);
 
     if (!task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
@@ -49,7 +51,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await Task.deleteOne({ _id: params.id });
+    await Task.deleteOne({ _id: id });
     return NextResponse.json({ message: "Task deleted" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

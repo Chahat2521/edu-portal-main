@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import Project from "@/models/Project";
 import { getUserFromRequest } from "@/lib/auth";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const token = getTokenFromHeader(req);
     if (!token) {
@@ -16,8 +16,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 
     await connectDB();
+    const { id } = await params;
 
-    const project = await Project.findById(params.id);
+    const project = await Project.findById(id);
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }

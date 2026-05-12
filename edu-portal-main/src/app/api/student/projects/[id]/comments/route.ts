@@ -4,7 +4,7 @@ import Comment from "@/models/Comment";
 import Project from "@/models/Project";
 import { getUserFromRequest } from "@/lib/auth";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const token = getTokenFromHeader(req);
     if (!token) {
@@ -17,8 +17,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 
     await connectDB();
+    const { id } = await params;
 
-    const comments = await Comment.find({ projectId: params.id })
+    const comments = await Comment.find({ projectId: id })
       .lean()
       .sort({ createdAt: -1 });
 
@@ -29,7 +30,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const token = getTokenFromHeader(req);
     if (!token) {
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 
     await connectDB();
+    const { id } = await params;
 
     const { content, authorName } = await req.json();
     if (!content) {
@@ -49,14 +51,14 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 
     const comment = await Comment.create({
-      projectId: params.id,
+      projectId: id,
       authorId: payload.sub,
       authorName: authorName || "Anonymous",
       content,
     });
 
     // Increment comment count on project
-    await Project.findByIdAndUpdate(params.id, { $inc: { commentCount: 1 } });
+    await Project.findByIdAndUpdate(id, { $inc: { commentCount: 1 } });
 
     return NextResponse.json({ comment }, { status: 201 });
   } catch (error: any) {

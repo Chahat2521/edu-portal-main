@@ -5,7 +5,7 @@ import { getUserFromRequest } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getUserFromRequest(req);
@@ -14,7 +14,8 @@ export async function PATCH(
     const body = await req.json();
     await connectDB();
 
-    const assignment = await Assignment.findById(params.id);
+    const { id } = await params;
+    const assignment = await Assignment.findById(id);
     if (!assignment) {
       return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
     }
@@ -23,7 +24,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const updated = await Assignment.findByIdAndUpdate(params.id, body, { new: true });
+    const updated = await Assignment.findByIdAndUpdate(id, body, { new: true });
     return NextResponse.json({ assignment: updated });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -32,14 +33,15 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     await connectDB();
-    const assignment = await Assignment.findById(params.id);
+    const { id } = await params;
+    const assignment = await Assignment.findById(id);
 
     if (!assignment) {
       return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
@@ -49,7 +51,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    await Assignment.deleteOne({ _id: params.id });
+    await Assignment.deleteOne({ _id: id });
     return NextResponse.json({ message: "Assignment deleted" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

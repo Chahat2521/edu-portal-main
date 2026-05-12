@@ -4,14 +4,15 @@ import { getUserFromRequest } from "@/lib/auth";
 import StudentGroup from "@/models/StudentGroup";
 
 /* ── POST /api/student/groups/[id]/join  – join a group ─────── */
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     await connectDB();
+    const { id } = await params;
 
-    const group = await StudentGroup.findById(params.id);
+    const group = await StudentGroup.findById(id);
     if (!group) return NextResponse.json({ error: "Group not found" }, { status: 404 });
 
     if (group.members.includes(user.id)) {
@@ -35,14 +36,15 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 }
 
 /* ── DELETE /api/student/groups/[id]/join  – leave a group ──── */
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = getUserFromRequest(req);
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     await connectDB();
+    const { id } = await params;
 
-    const group = await StudentGroup.findById(params.id);
+    const group = await StudentGroup.findById(id);
     if (!group) return NextResponse.json({ error: "Group not found" }, { status: 404 });
 
     if (group.creatorId === user.id) {

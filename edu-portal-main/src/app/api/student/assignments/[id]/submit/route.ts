@@ -10,7 +10,7 @@ import { requireRole } from "@/lib/auth";
  */
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { user, error } = requireRole(req, "student");
@@ -24,8 +24,9 @@ export async function POST(
     }
 
     await connectDB();
+    const { id } = await params;
 
-    const assignment = await Assignment.findById(params.id);
+    const assignment = await Assignment.findById(id);
     if (!assignment) {
       return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
     }
@@ -40,7 +41,7 @@ export async function POST(
     }
 
     const updated = await Assignment.findByIdAndUpdate(
-      params.id,
+      id,
       { submissionUrl, status: "submitted", studentId: user.sub },
       { new: true }
     );

@@ -68,7 +68,7 @@ export default function TeacherNavbar({ userName }: TeacherNavbarProps) {
       {/* Nav links */}
       <div style={{ display: "flex", gap: 4 }}>
         {NAV_LINKS.map(([label, href]) => {
-          const active = pathname === href || pathname.startsWith(href + "/");
+          const active = pathname ? (pathname === href || pathname.startsWith(href + "/")) : false;
           return (
             <Link
               key={label}
@@ -92,7 +92,7 @@ export default function TeacherNavbar({ userName }: TeacherNavbarProps) {
 
       {/* Right controls */}
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <ThemeToggle compact />
+        <ThemeToggle />
 
         <button
           onClick={() => router.push("/student")}

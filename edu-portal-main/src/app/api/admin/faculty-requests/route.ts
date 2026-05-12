@@ -54,9 +54,11 @@ export async function PATCH(req: NextRequest) {
         department: request.department,
       });
 
+      const reviewerId = user.id || user.sub;
+
       // Update request status
       request.status = "approved";
-      request.reviewedBy = user.id;
+      request.reviewedBy = reviewerId;
       await request.save();
 
       return NextResponse.json({
@@ -69,8 +71,9 @@ export async function PATCH(req: NextRequest) {
         },
       });
     } else if (action === "reject") {
+      const reviewerId = user.id || user.sub;
       request.status = "rejected";
-      request.reviewedBy = user.id;
+      request.reviewedBy = reviewerId;
       request.reviewNote = note;
       await request.save();
 

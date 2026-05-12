@@ -7,6 +7,8 @@ export interface IFacultyRequest extends Document {
   department: string;
   password: string;
   status: "pending" | "approved" | "rejected";
+  reviewedBy?: string;
+  reviewNote?: string;
   createdAt?: Date;
 }
 
@@ -22,6 +24,8 @@ const FacultyRequestSchema = new Schema<IFacultyRequest>(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    reviewedBy: { type: String },
+    reviewNote: { type: String },
   },
   { timestamps: true }
 );

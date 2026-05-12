@@ -20,7 +20,7 @@ const OPTIONS: ThemeOption[] = [
   { value: "dark",   Icon: Icons.Moon,    label: "Dark"   },
 ];
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ compact }: { compact?: boolean } = {}) {
   const [pref, setPref] = useState<ThemePreference>("light");
   const [mounted, setMounted] = useState(false);
 

@@ -11,7 +11,7 @@ const getToken = () => {
 
 type Status = "present" | "absent" | "late";
 
-interface Record {
+interface AttendanceRecord {
   _id: string; className: string; subject: string;
   date: string; status: Status;
 }
@@ -23,7 +23,7 @@ const STATUS_STYLES: Record<Status, { bg: string; text: string; icon: React.Reac
 };
 
 export default function StudentAttendancePage() {
-  const [records, setRecords]   = useState<Record[]>([]);
+  const [records, setRecords]   = useState<AttendanceRecord[]>([]);
   const [loading, setLoading]   = useState(true);
   const [filter, setFilter]     = useState<Status | "all">("all");
 
@@ -47,7 +47,7 @@ export default function StudentAttendancePage() {
   const pct     = total ? Math.round((present / total) * 100) : 0;
 
   // Group by subject
-  const bySubject = records.reduce<Record<string, Record[]>>((acc, r) => {
+  const bySubject = records.reduce<Record<string, AttendanceRecord[]>>((acc, r) => {
     acc[r.subject] = acc[r.subject] || [];
     acc[r.subject].push(r);
     return acc;

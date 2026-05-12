@@ -6,13 +6,17 @@ export interface TokenPayload {
   id: string;
   role: "student" | "teacher" | "admin";
   name: string;
+  sub: string;
 }
 
 export async function verifyToken(token: string): Promise<TokenPayload | null> {
   try {
     if (!token) return null;
-    const payload = await jwtVerify(token, secret);
-    return payload.payload as TokenPayload;
+    const { payload } = await jwtVerify(token, secret);
+    if (payload.id && !payload.sub) {
+      payload.sub = payload.id as string;
+    }
+    return payload as unknown as TokenPayload;
   } catch {
     return null;
   }

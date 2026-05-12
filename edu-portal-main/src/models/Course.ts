@@ -10,6 +10,7 @@ export interface ICourse extends Document {
   teacherId: string;
   teacherName: string;
   enrolledCount: number;
+  department?: string;
   createdAt?: Date;
 }
 
@@ -23,6 +24,7 @@ const CourseSchema = new Schema<ICourse>(
     semester: { type: Number, required: true },
     teacherId: { type: String, required: true },
     teacherName: { type: String, required: true },
+    department: { type: String, default: "" },
     enrolledCount: { type: Number, default: 0 },
   },
   { timestamps: true }

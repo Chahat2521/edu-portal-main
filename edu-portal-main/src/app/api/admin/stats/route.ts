@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import FacultyRequest from "@/models/FacultyRequest";
 import Course from "@/models/Course";
-import { getUserFromRequest, requireRole } from "@/lib/auth";
+import { getTokenFromHeader, verifyToken } from "@/lib/token";
 
 export async function GET(req: NextRequest) {
   try {

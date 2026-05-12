@@ -78,7 +78,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         {/* Nav */}
         <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: 3 }}>
           {NAV_LINKS.map(({ href, icon: Icon, label }) => {
-            const active = href === "/student" ? pathname === href : pathname.startsWith(href);
+            const active = href === "/student" ? pathname === href : pathname?.startsWith(href);
             return (
               <Link
                 key={href}

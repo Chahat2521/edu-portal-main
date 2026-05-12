@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Resource from "@/models/Resource";
-import { getUserFromRequest } from "@/lib/auth";
+import { getTokenFromHeader } from "@/lib/auth";
+import { verifyToken } from "@/lib/token";
 
 export async function GET(req: NextRequest) {
   try {

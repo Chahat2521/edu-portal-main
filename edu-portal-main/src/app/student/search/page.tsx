@@ -1,14 +1,22 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Card from "@/components/ui/Card";
 import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";
 
 export default function StudentSearchPage() {
+  return (
+    <Suspense fallback={<div style={{ display: "flex", justifyContent: "center", padding: 60 }}><Icons.Loader width={28} height={28} className="animate-spin" style={{ color: "var(--muted)" }} /></div>}>
+      <StudentSearchContent />
+    </Suspense>
+  );
+}
+
+function StudentSearchContent() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
+  const query = searchParams?.get("q") || "";
   
   const [results, setResults] = useState<{courses: any[], assignments: any[], grades: any[]}>({ courses: [], assignments: [], grades: [] });
   const [loading, setLoading] = useState(true);

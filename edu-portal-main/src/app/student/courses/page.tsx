@@ -54,10 +54,10 @@ export default function StudentCoursesPage() {
         <Card style={{ textAlign: "center", padding: "60px 24px" }}>
           <Icons.Courses width={48} height={48} style={{ color: "var(--muted)", margin: "0 auto 16px", opacity: 0.4 }} />
           <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text)" }}>
-            {search ? "No courses match your search" : "No courses available yet"}
+            {searchQuery ? "No courses match your search" : "No courses available yet"}
           </h3>
           <p style={{ color: "var(--muted)", fontSize: 14, marginTop: 8 }}>
-            {search ? "Try a different keyword." : "Courses created by your teachers will appear here."}
+            {searchQuery ? "Try a different keyword." : "Courses created by your teachers will appear here."}
           </p>
         </Card>
       ) : (

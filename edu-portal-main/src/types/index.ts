@@ -107,8 +107,6 @@ export interface AdminStats {
   pendingRequests: number;
   totalCourses: number;
 }
-  enrolledCount: number;
-}
 
 export interface CollegeCourse {
   _id: string;

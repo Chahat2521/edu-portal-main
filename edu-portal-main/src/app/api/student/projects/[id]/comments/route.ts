@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Comment from "@/models/Comment";
 import Project from "@/models/Project";
-import { getUserFromRequest } from "@/lib/auth";
+import { getTokenFromHeader } from "@/lib/auth";
+import { verifyToken } from "@/lib/token";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
